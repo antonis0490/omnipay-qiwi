@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\Omnipay\Qiwi\Message;
+namespace Omnipay\Qiwi\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RedirectResponseInterface;

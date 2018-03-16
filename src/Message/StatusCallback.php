@@ -1,5 +1,5 @@
 <?php
-namespace Omnipay\Omnipay\Qiwi\Message;
+namespace Omnipay\Qiwi\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 use Cake\Utility\Xml;

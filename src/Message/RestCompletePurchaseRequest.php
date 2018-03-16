@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Omnipay\Omnipay\Qiwi\Message;
+namespace Omnipay\Qiwi\Message;
 
 class RestCompletePurchaseRequest extends PaymentCompleteRequest
 {

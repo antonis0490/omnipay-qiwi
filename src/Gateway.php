@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\Omnipay\Qiwi;
+namespace Omnipay\Qiwi;
 
 use Omnipay\Common\AbstractGateway;
 
