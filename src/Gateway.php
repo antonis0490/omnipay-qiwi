@@ -16,35 +16,60 @@ class Gateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return array(
-            'clientId' => '',
-            'secret' => '',
-            'token' => '',
+            'qiwiApiId' => '',
+            'qiwiApiPass' => '',
+            'qiwiApiNotifyPass' => '',
+            'qiwiWallet' => '',
             'testMode' => false,
         );
     }
 
-    public function getClientId()
+    public function getQiwiApiId()
     {
-        return $this->getParameter('clientId');
+        return $this->getParameter('qiwiApiId');
     }
 
 
-    public function setClientId($value)
+    public function setQiwiApiId($value)
     {
-        return $this->setParameter('clientId', $value);
+        return $this->setParameter('qiwiApiId', $value);
     }
 
 
-    public function getSecret()
+    public function getQiwiApiPass()
     {
-        return $this->getParameter('secret');
+        return $this->getParameter('qiwiApiPass');
     }
 
 
-    public function setSecret($value)
+    public function setQiwiApiPass($value)
     {
-        return $this->setParameter('secret', $value);
+        return $this->setParameter('qiwiApiPass', $value);
     }
+
+    public function getQiwiApiNotifyPass()
+    {
+        return $this->getParameter('qiwiApiNotifyPass');
+    }
+
+
+    public function setQiwiApiNotifyPass($value)
+    {
+        return $this->setParameter('qiwiApiNotifyPass', $value);
+    }
+
+    public function getQiwiWallet()
+    {
+        return $this->getParameter('qiwiWallet');
+    }
+
+
+    public function setQiwiWallet($value)
+    {
+        return $this->setParameter('qiwiWallet', $value);
+    }
+
+
 
 
     public function getToken()
