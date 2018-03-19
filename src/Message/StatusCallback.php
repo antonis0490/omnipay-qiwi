@@ -6,7 +6,7 @@ use Cake\Utility\Xml;
 
 class StatusCallback extends AbstractResponse
 {
-    
+
     const STATUS_SUCCESSFUL = 'approved';
     const STATUS_PENDING = 'pending';
 
@@ -37,7 +37,7 @@ class StatusCallback extends AbstractResponse
     {
         return mb_strtolower($this->order['status']);
     }
-    
+
     public function getMessage()
     {
         return $this->order['description'].$this->order['decline_reason'];

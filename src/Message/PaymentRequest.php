@@ -2,28 +2,16 @@
 
 namespace Omnipay\Qiwi\Message;
 
-use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Exception\InvalidResponseException;
+use Omnipay\Common\Message\AbstractRequest;
 
 
 class PaymentRequest extends AbstractRequest
 {
     public $liveEndpoint = 'https://api.qiwi.com/api/v2/prv/';
-    protected $sandboxEndpoint = '';
-
     public $liveEndpoint2 = 'https://bill.qiwi.com/order/external/main.action';
+    protected $sandboxEndpoint = '';
     protected $sandboxEndpoint2 = '';
-
-
-    public function getEndpoint()
-    {
-        return ((bool)$this->getTestMode()) ? $this->sandboxEndpoint : $this->liveEndpoint;
-    }
-
-    public function getEndpoint2()
-    {
-        return ((bool)$this->getTestMode()) ? $this->sandboxEndpoint2 : $this->liveEndpoint2;
-    }
 
     public function getReturnUrl()
     {
@@ -36,26 +24,14 @@ class PaymentRequest extends AbstractRequest
         return $this->setParameter('returnURL', $value);
     }
 
-    public function getName()
+    public function setQiwiApiId($value)
     {
-        return $this->getParameter('name');
-
+        return $this->setParameter('qiwiApiId', $value);
     }
 
-    public function setName($value)
+    public function setQiwiApiPass($value)
     {
-        return $this->setParameter('name', $value);
-    }
-
-    public function getLname()
-    {
-        return $this->getParameter('lname');
-
-    }
-
-    public function setLname($value)
-    {
-        return $this->setParameter('lname', $value);
+        return $this->setParameter('qiwiApiPass', $value);
     }
 
     public function getNotifyUrl()
@@ -70,25 +46,41 @@ class PaymentRequest extends AbstractRequest
     }
 
 
-    public function getClientId()
+    public function getTransaction()
     {
-        return $this->getParameter('clientId');
+        return $this->getParameter('transaction');
+
     }
 
-
-    public function setClientId($value)
+    public function setTransaction($value)
     {
-        return $this->setParameter('clientId', $value);
+        return $this->setParameter('transaction', $value);
     }
 
-    public function getPassword()
+    public function getTarget()
     {
-        return $this->getParameter('password');
+        return $this->getParameter('target');
+
     }
 
-    public function setPassword($value)
+    public function setTarget($value)
     {
-        return $this->setParameter('password', $value);
+        return $this->setParameter('target', $value);
+    }
+
+    public function getQiwiApiNotifyPass()
+    {
+        return $this->getParameter('qiwiApiNotifyPass');
+    }
+
+    public function setQiwiApiNotifyPass($value)
+    {
+        return $this->setParameter('qiwiApiNotifyPass', $value);
+    }
+
+    public function setQiwiWallet($value)
+    {
+        return $this->setParameter('qiwiWallet', $value);
     }
 
     public function getNumber()
@@ -111,19 +103,9 @@ class PaymentRequest extends AbstractRequest
         return $this->setParameter('description', $value);
     }
 
-    public function getCurrency()
+    public function setCcy($value)
     {
-        return $this->getParameter('currency');
-    }
-
-    public function setCurrency($value)
-    {
-        return $this->setParameter('currency', $value);
-    }
-
-    public function getAmount()
-    {
-        return $this->getParameter('amount');
+        return $this->setParameter('ccy', $value);
     }
 
     public function setAmount($value)
@@ -131,14 +113,14 @@ class PaymentRequest extends AbstractRequest
         return $this->setParameter('amount', $value);
     }
 
-    public function getEmail()
+    public function getShop()
     {
-        return $this->getParameter('email');
+        return $this->getParameter('shop');
     }
 
-    public function setEmail($value)
+    public function setShop($value)
     {
-        return $this->setParameter('email', $value);
+        return $this->setParameter('shop', $value);
     }
 
     public function getCartId()
@@ -167,22 +149,22 @@ class PaymentRequest extends AbstractRequest
 
     public function getSuccessUrl()
     {
-        return $this->getParameter('success_url');
+        return $this->getParameter('successUrl');
     }
 
     public function setSuccessUrl($value)
     {
-        return $this->setParameter('success_url', $value);
+        return $this->setParameter('successUrl', $value);
     }
 
-    public function getDeclineUrl()
+    public function getfailUrl()
     {
-        return $this->getParameter('decline_url');
+        return $this->getParameter('failUrl');
     }
 
-    public function setDeclineUrl($value)
+    public function setfailUrl($value)
     {
-        return $this->setParameter('decline_url', $value);
+        return $this->setParameter('failUrl', $value);
     }
 
     public function getCancelUrl()
@@ -225,6 +207,10 @@ class PaymentRequest extends AbstractRequest
         return $this->setParameter('secret', $value);
     }
 
+    public function setComment($value)
+    {
+        return $this->setParameter('comment', $value);
+    }
 
     public function setOrderTime($value)
     {
@@ -236,6 +222,15 @@ class PaymentRequest extends AbstractRequest
         return $this->getParameter('orderTime');
     }
 
+    public function setUser($value)
+    {
+        return $this->setParameter('user', $value);
+    }
+
+    public function setLifetime($value)
+    {
+        return $this->setParameter('lifetime', $value);
+    }
 
     public function getToken()
     {
@@ -249,57 +244,117 @@ class PaymentRequest extends AbstractRequest
         return $input;
     }
 
-
     public function setToken($value)
     {
         return $this->setParameter('token', $value);
     }
 
-
     public function getData()
     {
 
-        $concat = $this->getCartId() . ";" . $this->getAmount() . ";" . $this->getCurrency() . ";" . $this->getClientId() . ";" . $this->getHeader();
-        $concat = hash("sha256", $concat);
-
-        $sign = crypt($concat, $this->getSecret());
-        $pos = mb_strpos($sign, $this->getSecret()) + mb_strlen($this->getSecret());
-        $signature = mb_substr($sign, $pos);
 
         $input = array
         (
-            "header" => array
-            (
-                "version" => $this->getHeader(),
-                "merchantCode" => $this->getClientId(),
-                "signature" => $signature
-            ),
-            "body" => array
-            (
-                "channelCode" => "BANK_TRANSFER",
-                "notifyURL" => $this->getNotifyUrl(),
-                "returnURL" => $this->getReturnUrl(),
-                "orderAmount" => $this->getAmount(),
-                "orderTime" => $this->getOrderTime(),
-                "cartId" => $this->getCartId(),
-                "currency" => $this->getCurrency(),
-                "customerInfo" => array
-                (
-                    "address" => array
-                    (
-                        "email" => $this->getEmail()
-                    ),
-                    "cardHolderFirstName" => $this->getName(),
-                    "cardHolderLastName" => $this->getLname()
-                )
-            )
-        );
+            "amount" => $this->getAmount(),
+            "ccy" => $this->getCcy(),
+            "comment" => $this->getComment(),
+            "user" => "tel:" . $this->getUser(),
+            "lifetime" => $this->getLifetime()
 
-        $encoded = json_encode($input);
+        );
 
         return $input;
     }
 
+    public function getAmount()
+    {
+        return $this->getParameter('amount');
+    }
+
+    public function getCcy()
+    {
+        return $this->getParameter('ccy');
+    }
+
+    public function getComment()
+    {
+        return $this->getParameter('comment');
+    }
+
+    public function getUser()
+    {
+        return $this->getParameter('user');
+    }
+
+    public function getLifetime()
+    {
+        return $this->getParameter('lifetime');
+    }
+
+    public function getQiwiWallet()
+    {
+        return $this->getParameter('qiwiWallet');
+    }
+
+    public function sendData($data)
+    {
+        // don't throw exceptions for 4xx errors
+        $this->httpClient->getEventDispatcher()->addListener(
+            'request.error',
+            function ($event) {
+                if ($event['response']->isClientError()) {
+                    $event->stopPropagation();
+                }
+            }
+        );
+
+        // Guzzle HTTP Client createRequest does funny things when a GET request
+        // has attached data, so don't send the data if the method is GET.
+        if ($this->getHttpMethod() == 'GET') {
+            $httpRequest = $this->httpClient->createRequest(
+                $this->getHttpMethod(),
+                $this->getEndpoint() . '?' . http_build_query($data),
+                array(
+                    'Accept' => 'application/json')
+            );
+        } else {
+            $httpRequest = $this->httpClient->createRequest(
+                $this->getHttpMethod(),
+                $this->getEndpoint().$this->getQiwiWallet()."/bills/".$this->getComment(),
+                array(
+                    'Accept' => 'application/json'
+                ),
+                http_build_query($data)
+            );
+        }
+
+        try {
+
+
+            $httpRequest->getCurlOptions()->set(CURLOPT_SSLVERSION, 6); // CURL_SSLVERSION_TLSv1_2 for libcurl < 7.35
+            $httpRequest->getCurlOptions()->set(CURLOPT_POSTFIELDS, http_build_query($data));
+            $httpRequest->getCurlOptions()->set(CURLOPT_RETURNTRANSFER, true);
+            $httpRequest->setAuth($this->getQiwiApiId(), $this->getQiwiApiPass());
+            $httpResponse = $httpRequest->send();
+            // Empty response body should be parsed also as and empty array
+            $body = $httpResponse->getBody(true);
+            $jsonToArrayResponse = !empty($body) ? $httpResponse->json() : array();
+
+            if($jsonToArrayResponse['response']['result_code'] == 0 && mb_strtolower($jsonToArrayResponse['response']['bill']['status']) == 'waiting'){
+                return $this->response = $this->createResponse($jsonToArrayResponse, $this->getEndpoint2());
+
+            }
+            else{
+                return false;
+            }
+
+        } catch (\Exception $e) {
+            throw new InvalidResponseException(
+                'Error communicating with payment gateway: ' . $e->getMessage(),
+                $e->getCode()
+            );
+        }
+    }
 
     /**
      * Get HTTP Method.
@@ -310,12 +365,12 @@ class PaymentRequest extends AbstractRequest
      */
     protected function getHttpMethod()
     {
-        return 'POST';
+        return 'PUT';
     }
 
-    protected function createResponse($data, $endpoint)
+    public function getEndpoint()
     {
-        return $this->response = new PaymentResponse($this, $data, $endpoint);
+        return ((bool)$this->getTestMode()) ? $this->sandboxEndpoint : $this->liveEndpoint;
     }
 
     /**
@@ -336,60 +391,31 @@ class PaymentRequest extends AbstractRequest
 //        return str_replace('\\/', '/', json_encode($data, $options));
     }
 
+    public function getQiwiApiId()
+    {
+        return $this->getParameter('qiwiApiId');
+
+    }
+
+    public function getQiwiApiPass()
+    {
+        return $this->getParameter('qiwiApiPass');
+
+    }
+
+    protected function createResponse($data, $endpoint)
+    {
+        return $this->response = new PaymentResponse($this, $data, $endpoint);
+    }
+
 
 //    public function sendData($data)
 //    {
 //        return new PaymentResponse($this, $data, $this->getEndpoint());
 //    }
-    public function sendData($data)
+
+    public function getEndpoint2()
     {
-        // don't throw exceptions for 4xx errors
-        $this->httpClient->getEventDispatcher()->addListener(
-            'request.error',
-            function ($event) {
-                if ($event['response']->isClientError()) {
-                    $event->stopPropagation();
-                }
-            }
-        );
-
-        // Guzzle HTTP Client createRequest does funny things when a GET request
-        // has attached data, so don't send the data if the method is GET.
-        if ($this->getHttpMethod() == 'GET') {
-            $httpRequest = $this->httpClient->createRequest(
-                $this->getHttpMethod(),
-                $this->getEndpoint() . '?' . http_build_query($data),
-                array(
-                    'Accept' => 'application/json',
-                    'Content-type' => 'application/json',
-                )
-            );
-        } else {
-            $httpRequest = $this->httpClient->createRequest(
-                $this->getHttpMethod(),
-                $this->getEndpoint(),
-                array(
-                    'Accept' => 'application/json',
-                    'Content-type' => 'application/json',
-                ),
-                $this->toJSON($data)
-            );
-        }
-
-        try {
-            $httpRequest->getCurlOptions()->set(CURLOPT_SSLVERSION, 6); // CURL_SSLVERSION_TLSv1_2 for libcurl < 7.35
-            $httpRequest->getCurlOptions()->set(CURLOPT_POSTFIELDS, $this->toJSON($data) );
-            $httpRequest->getCurlOptions()->set(CURLOPT_RETURNTRANSFER, true);
-            $httpResponse = $httpRequest->send();
-            // Empty response body should be parsed also as and empty array
-            $body = $httpResponse->getBody(true);
-            $jsonToArrayResponse = !empty($body) ? $httpResponse->json() : array();
-            return $this->response = $this->createResponse($jsonToArrayResponse, $this->getEndpoint2());
-        } catch (\Exception $e) {
-            throw new InvalidResponseException(
-                'Error communicating with payment gateway: ' . $e->getMessage(),
-                $e->getCode()
-            );
-        }
+        return ((bool)$this->getTestMode()) ? $this->sandboxEndpoint2 : $this->liveEndpoint2;
     }
 }

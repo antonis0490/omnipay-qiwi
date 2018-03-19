@@ -19,7 +19,7 @@ abstract class AbstractRestRequest extends \Omnipay\Common\Message\AbstractReque
      * Live Endpoint URL
      * @var string URL
      */
-    protected $liveEndpoint = 'https://api.qiwi.com/api/'.self::API_VERSION.'/prv/';
+    protected $liveEndpoint = 'https://api.qiwi.com/api/v2/prv/';
 
     /**
      * Payer ID

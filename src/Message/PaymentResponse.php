@@ -33,7 +33,7 @@ class PaymentResponse extends AbstractResponse implements RedirectResponseInterf
      */
     public function getRedirectMethod()
     {
-        return 'POST';
+        return 'GET';
     }
 
     /**
@@ -41,13 +41,13 @@ class PaymentResponse extends AbstractResponse implements RedirectResponseInterf
      */
     public function getRedirectData()
     {
-        $data = $this->getData();
-        $data["token"] = $data["body"]["token"];
-//        foreach ($data as $key => $value) {
-//            if (empty($value)) {
-//                unset($data[$key]);
-//            }
-//        }
+        $dataNeeded = array("shop","transaction","successUrl","failUrl","target");
+        $data = $this->request->getParameters();
+        foreach ($data as $key => $value) {
+            if (empty($value) || !in_array($key, $dataNeeded) ) {
+                unset($data[$key]);
+            }
+        }
         return $data;
     }
 
