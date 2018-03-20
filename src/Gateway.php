@@ -20,7 +20,7 @@ class Gateway extends AbstractGateway
             'qiwiApiPass' => '',
             'qiwiApiNotifyPass' => '',
             'qiwiWallet' => '',
-            'testMode' => false,``
+            'testMode' => false,
         );
     }
 
@@ -136,7 +136,7 @@ class Gateway extends AbstractGateway
      *
      * @param string $class
      * @param array $parameters
-     * @return \Omnipay\Omnipay\Qiwi\Message\AbstractRestRequest
+     * @return \Omnipay\Qiwi\Message\AbstractRestRequest
      */
     public function createRequest($class, array $parameters = array())
     {
@@ -152,7 +152,7 @@ class Gateway extends AbstractGateway
     /**
      * Create a purchase request.
      * @param array $parameters
-     * @return \Omnipay\Omnipay\Qiwi\Message\RestPurchaseRequest
+     * @return \Omnipay\Qiwi\Message\RestPurchaseRequest
      */
     public function purchase(array $parameters = array())
     {
@@ -162,7 +162,7 @@ class Gateway extends AbstractGateway
     /**
      * Create a purchase request.
      * @param array $parameters
-     * @return \Omnipay\Omnipay\Qiwi\Message\RestPurchaseRequest
+     * @return \Omnipay\Qiwi\Message\RestPurchaseRequest
      */
     public function completePurchase(array $parameters = array())
     {
