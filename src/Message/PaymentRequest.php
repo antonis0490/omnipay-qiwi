@@ -345,7 +345,8 @@ class PaymentRequest extends AbstractRequest
 
             }
             else{
-                return false;
+                $jsonToArrayResponse["failed"]=1;
+                return $jsonToArrayResponse;
             }
 
         } catch (\Exception $e) {
